@@ -1,5 +1,7 @@
 import "./App.css";
 import { Component } from "react";
+import Statistics from "./components/Statistics";
+import FeedbackOption from "./components/FeedbackOption";
 
 class App extends Component {
   state = {
@@ -23,40 +25,42 @@ class App extends Component {
 
   countPositiveFeedbackPercentage = () => {
     const { good } = this.state;
-    const positive = good / this.countTotalFeedback() * 100;
-    return Maths.floor(positive)
+    const total = this.countTotalFeedback();
+    
+    if (total === 0) return 0;
 
+    const positive = (good / total) * 100;
+    return Math.floor(positive);
   };
 
   render() {
-    const option = Object.keys(this.state);
+    const options = Object.keys(this.state);
+    const totalFeedback = this.countTotalFeedback();
 
     return (
       <>
         <section>
           <h1>Please leave feedback</h1>
-          <div>
-            {option.map((btn) => {
-              return (
-                <button
-                  onClick={() => this.handleCounterFeedback(btn)}
-                  key={btn}
-                  type="button"
-                >
-                  {btn}
-                </button>
-              );
-            })}
-          </div>
+          {/* Компонент для отрисовки кнопок */}
+          <FeedbackOption 
+            options={options} 
+            onLeaveFeedback={this.handleCounterFeedback} 
+          />
         </section>
 
         <section>
-          <h2>Statistic</h2>
-          <p>Good: {this.state.good}</p>
-          <p>Neutral: {this.state.neutral}</p>
-          <p>Bad: {this.state.bad}</p>
-          <p>Total: {this.countTotalFeedback()}</p>
-          <p>Positive feedback: {this.countPositiveFeedbackPercentage()} %</p>
+          <h2>Statistics</h2>
+          {totalFeedback > 0 ? (
+            <Statistics 
+              good={this.state.good} 
+              neutral={this.state.neutral} 
+              bad={this.state.bad} 
+              total={this.countTotalFeedback} 
+              positivePercentage={this.countPositiveFeedbackPercentage()} 
+            />
+          ) : (
+            <p>No feedback given yet</p>
+          )}
         </section>
       </>
     );
