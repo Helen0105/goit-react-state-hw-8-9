@@ -2,21 +2,15 @@ import { Component } from "react";
 
 class Statistics extends Component {
   render() {
-    const { options, onLeaveFeedback } = this.props;
+    const { good, neutral, bad, total, positivePercentage } = this.props;
 
     return (
       <div>
-        {options.map((btn) => {
-          return (
-            <button
-              onClick={() => onLeaveFeedback(btn)}
-              key={btn}
-              type="button"
-            >
-              {btn[0].toUpperCase() + btn.slice(1)}
-            </button>
-          );
-        })}
+        <p>Good: {good}</p>
+        <p>Neutral: {neutral}</p>
+        <p>Bad: {bad}</p>
+        <p>Total: {total}</p>
+        <p>Positive feedback: {positivePercentage}%</p>
       </div>
     );
   }

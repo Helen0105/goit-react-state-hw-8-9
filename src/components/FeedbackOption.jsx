@@ -1,17 +1,23 @@
 import { Component } from "react";
- class FeedbackOption extends Component {
-    render () {
-        return (
-            <div>
-                <p>Good: {this.props.good}</p>
-              <p>Neutral: {this.props.neutral}</p>
-              <p>Bad: {this.props.bad}</p>
-              <p>Total: {this.props.total}</p>
-              <p>Positive feedback: {this.props.good > 0 ? this.props.positvePercentage : 0}%</p>
-            </div>
-        )
-    }
- }
 
+class FeedbackOptions extends Component {
+  render() {
+    const { options, onLeaveFeedback } = this.props;
 
- export default FeedbackOption
+    return (
+      <div>
+        {options.map((btn) => (
+          <button
+            onClick={() => onLeaveFeedback(btn)}
+            key={btn}
+            type="button"
+          >
+            {btn[0].toUpperCase() + btn.slice(1)}
+          </button>
+        ))}
+      </div>
+    );
+  }
+}
+
+export default FeedbackOptions;

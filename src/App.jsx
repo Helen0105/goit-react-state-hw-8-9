@@ -1,7 +1,9 @@
 import "./App.css";
 import { Component } from "react";
 import Statistics from "./components/Statistics";
-import FeedbackOption from "./components/FeedbackOption";
+import FeedbackOptions from "./components/FeedbackOption";
+import Section from "./components/Section";
+import Notification from "./components/Notification";
 
 class App extends Component {
   state = {
@@ -11,11 +13,9 @@ class App extends Component {
   };
 
   handleCounterFeedback = (type) => {
-    this.setState((prevState) => {
-      return {
-        [type]: prevState[type] + 1,
-      };
-    });
+    this.setState((prevState) => ({
+      [type]: prevState[type] + 1,
+    }));
   };
 
   countTotalFeedback = () => {
@@ -30,38 +30,36 @@ class App extends Component {
     if (total === 0) return 0;
 
     const positive = (good / total) * 100;
-    return Math.floor(positive);
+    return Math.floor(positive); 
   };
 
   render() {
     const options = Object.keys(this.state);
     const totalFeedback = this.countTotalFeedback();
+    const positivePercentage = this.countPositiveFeedbackPercentage();
 
     return (
       <>
-        <section>
-          <h1>Please leave feedback</h1>
-          {/* Компонент для отрисовки кнопок */}
-          <FeedbackOption 
+        <Section title="Please leave feedback">
+          <FeedbackOptions 
             options={options} 
             onLeaveFeedback={this.handleCounterFeedback} 
           />
-        </section>
+        </Section>
 
-        <section>
-          <h2>Statistics</h2>
+        <Section title="Statistics">
           {totalFeedback > 0 ? (
             <Statistics 
               good={this.state.good} 
               neutral={this.state.neutral} 
               bad={this.state.bad} 
-              total={this.countTotalFeedback} 
-              positivePercentage={this.countPositiveFeedbackPercentage()} 
+              total={totalFeedback} 
+              positivePercentage={positivePercentage} 
             />
           ) : (
-            <p>No feedback given yet</p>
+            <Notification message="There is no feedback" />
           )}
-        </section>
+        </Section>
       </>
     );
   }
